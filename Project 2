@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Para Sof</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+            color: #111;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content p {
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #111;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .card img {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #miniPlayer {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Para Sof</h1>
+        <p>Cosas que no te dije 💭</p>
+    </header>
+
+    <main class="grid">
+        <div class="card" onclick="showMessage(0)">
+            <img src="r_and_u.jpeg" alt="Mensaje 1">
+            <div class="card-content">
+                <p>Perdón por irme así, sin decir nada.
+                    La verdad es que me dio miedo de quererte más de lo que tú me querías a mí.
+                    No supe cómo manejarlo y me alejé, pero no porque no me importaras,
+                    sino porque me importabas demasiado.</p>
+            </div>
+        </div>
+
+        <div class="card" onclick="showMessage(1)">
+            <img src="sgam.jpeg" alt="Mensaje 2">
+            <div class="card-content">
+                <p>Quiero pedirte disculpas
+                    de todo corazón por cómo terminé todo y por bloquearte
+                    de la nada. Fue una decisión impulsiva y egoísta, y reconozco
+                    lo mal que lo hice.</p>
+            </div>
+        </div>
+
+        <div class="card" onclick="showMessage(2)">
+            <img src="cora.jpeg" alt="Mensaje 3">
+            <div class="card-content">
+                <p>Yo solo quiero que nunca pienses que no te quiero, pero es
+                    que me es complicado confiar en diversas situaciones. Me da miedo todo y sobrepienso
+                    todo lo que sucede en mi vida. Sé que no es justificación, pero solo quiero que me quieras
+                    cómo yo a ti.</p>
+            </div>
+        </div>
+    </main>
+
+    <button class="music-btn" onclick="toggleMusic()" id="musicBtn">🎵 Reproducir música</button>
+    <section id="playlist" style="max-width: 400px; margin: 0 auto 80px; padding: 20px;">
+        <h2 style="text-align: center; margin-bottom: 20px;">🎶 Mi Playlist</h2>
+        <div id="songList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        <div style="margin-top: 20px; text-align: center;">
+            <img id="currentCover" src="Jhayco.jpeg"
+                style="width: 100%; max-width: 250px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 10px;" />
+            <button id="mainMusicBtn" onclick="toggleMusic()"
+                style="padding: 12px 24px; border-radius: 20px; border: none; background-color: #111; color: #fff; font-size: 14px; cursor: pointer;">
+                ⏸️ Pausar música
+            </button>
+        </div>
+    </section>
+
+    <script>
+        const playlist = [
+            {
+                name: "Joe - Jhayco",
+                file: "joe.mp3",
+                cover: "Jhayco.jpeg"
+            },
+            {
+                name: "La verdad - Kidd Voodoo",
+                file: "La verdad.mp3",
+                cover: "Kidd.jpeg"
+            },
+            {
+                name: "Los alpes - Nsqk",
+                file: "Los alpes.mp3",
+                cover: "Nsqk.jpg"
+            },
+            {
+                name: "Tonos de Azul - Nsqk",
+                file: "Tonos de Azul.mp3",
+                cover: "Botánica.jpg"
+            },
+            {
+                name: "Me Rehúso - Danny Ocean",
+                file: "Me Rehúso.mp3",
+                cover: "Danny.jpg"
+            },
+            {
+                name: "Vuelve - Danny Ocean",
+                file: "Vuelve.mp3",
+                cover: "Danny.jpg"
+            },
+            {
+                name: "Labios compartidos - Maná",
+                file: "Labios Compartidos.mp3",
+                cover: "Maná.jpg"
+            },
+        ];
+
+        let currentIndex = 0;
+        let audio = new Audio(playlist[currentIndex].file);
+        audio.loop = true;
+        let isPlaying = true;
+
+        const songList = document.getElementById("songList");
+        const coverImage = document.getElementById("currentCover");
+        const musicBtn = document.getElementById("mainMusicBtn");
+        const miniPlayer = document.getElementById("miniPlayer");
+        const miniCover = document.getElementById("miniCover");
+        const miniTitle = document.getElementById("miniTitle");
+        const miniPlayBtn = document.getElementById("miniPlayBtn");
+        const progressBar = document.getElementById("progressBar");
+        const currentTimeDisplay = document.getElementById("currentTime");
+        const totalTimeDisplay = document.getElementById("totalTime");
+
+        playlist.forEach((song, index) => {
+            const item = document.createElement("div");
+            item.style.display = "flex";
+            item.style.alignItems = "center";
+            item.style.gap = "12px";
+            item.style.cursor = "pointer";
+            item.style.padding = "10px";
+            item.style.borderRadius = "10px";
+            item.style.transition = "background-color 0.2s ease";
+            item.onmouseover = () => item.style.backgroundColor = "#f0f0f0";
+            item.onmouseout = () => item.style.backgroundColor = "transparent";
+            item.onclick = () => playSong(index);
+
+            const img = document.createElement("img");
+            img.src = song.cover;
+            img.style.width = "50px";
+            img.style.height = "50px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "8px";
+
+            const text = document.createElement("span");
+            text.textContent = song.name;
+            text.style.fontSize = "14px";
+
+            item.appendChild(img);
+            item.appendChild(text);
+            songList.appendChild(item);
+        });
+
+        function playSong(index) {
+            currentIndex = index;
+            const song = playlist[currentIndex];
+            audio.pause();
+            audio = new Audio(song.file);
+            audio.loop = true;
+            audio.play();
+            audio.addEventListener("timeupdate", updateProgress);
+            isPlaying = true;
+
+function updateProgress() {
+    const current = audio.currentTime;
+    const duration = audio.duration;
+
+    if (!isNaN(duration)) {
+        progressBar.max = duration;
+        progressBar.value = current;
+        currentTimeDisplay.textContent = formatTime(current);
+        totalTimeDisplay.textContent = formatTime(duration);
+    }
+}
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? "0" + sec : sec}`;
+}
+
+            coverImage.src = song.cover;
+            musicBtn.textContent = "⏸️ Pausar música";
+
+            miniCover.src = song.cover;
+            miniTitle.textContent = song.name;
+            miniPlayBtn.textContent = "⏸️";
+            miniPlayer.style.display = "block";
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicBtn.textContent = "🎵 Reproducir música";
+                if (miniPlayBtn) miniPlayBtn.textContent = "▶️";
+            } else {
+                audio.play();
+                musicBtn.textContent = "⏸️ Pausar música";
+                if (miniPlayBtn) miniPlayBtn.textContent = "⏸️";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function nextSong() {
+            currentIndex = (currentIndex + 1) % playlist.length;
+            playSong(currentIndex);
+        }
+
+        function previousSong() {
+            currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+            playSong(currentIndex);
+        }
+
+        progressBar.addEventListener("input", () => {
+    audio.currentTime = progressBar.value;
+});
+    </script>
+
+    <div id="miniPlayer" style="
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 9999;
+    font-family: 'Inter', sans-serif;">
+        <div style="display: flex; align-items: center; padding: 10px;">
+            <img id="miniCover" src="" alt="cover"
+                style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+            <div style="flex: 1; padding-left: 10px;">
+                <div id="miniTitle" style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">Canción actual</div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #666;">
+                    <span id="currentTime">0:00</span>
+                    <span id="totalTime">0:00</span>
+                </div>
+                <input type="range" id="progressBar" value="0" min="0" max="100" step="1"
+                    style="width: 100%; margin-top: 6px;">
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 8px;">
+                    <button onclick="previousSong()"
+                        style="padding: 6px; border: none; background: #eee; border-radius: 6px;">⏮️</button>
+                    <button onclick="toggleMusic()" id="miniPlayBtn"
+                        style="padding: 6px 12px; border: none; background: #111; color: white; border-radius: 6px;">⏸️</button>
+                    <button onclick="nextSong()"
+                        style="padding: 6px; border: none; background: #eee; border-radius: 6px;">⏭️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
